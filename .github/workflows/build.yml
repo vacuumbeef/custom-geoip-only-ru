@@ -1,0 +1,129 @@
+name: Build geoip
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '10 3 * * *'
+  push:
+    branches:
+      - test
+      - main
+    paths-ignore:
+      - "README.md"
+      - ".gitignore"
+      - "LICENSE"
+      - "release/**"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      CURL: "curl -fsSL --retry 3 --retry-delay 2 --retry-connrefused"
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Checkout Loyalsoldier/geoip
+        uses: actions/checkout@v6
+        with:
+          repository: Loyalsoldier/geoip
+          path: geoip
+          fetch-depth: 1
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: geoip/go.mod
+          cache: true
+          cache-dependency-path: geoip/go.sum
+
+
+      - name: Overlay custom files over geoip
+        run: |
+          set -euo pipefail
+          cp -f ./*.json geoip/ 2>/dev/null || true
+          cp -f ./*.txt  geoip/ 2>/dev/null || true
+          cp -f ./*.py   geoip/ 2>/dev/null || true
+
+      - name: Set tag
+        if: github.ref_name == 'main'
+        run: |
+          set -euo pipefail
+          DAILY_TAG=$(date +%Y%m%d%H%M)
+          echo "DAILY_TAG=$DAILY_TAG" >> "$GITHUB_ENV"
+
+      - name: Create Tag
+        if: github.ref_name == 'main'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { DAILY_TAG } = process.env
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${DAILY_TAG}`,
+              sha: context.sha
+            })
+
+      - name: Download inputs (IP lists + Geobases)
+        working-directory: geoip
+        run: |
+          set -euo pipefail
+          ${{ env.CURL }} -o telegram.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/telegram.lst
+          ${{ env.CURL }} -o discord.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/discord.lst
+          ${{ env.CURL }} -o meta.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/meta.lst
+          ${{ env.CURL }} -o twitter.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/twitter.lst
+          ${{ env.CURL }} -o cloudflare.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/cloudflare.lst
+          ${{ env.CURL }} -o cloudfront.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/cloudfront.lst
+          ${{ env.CURL }} -o digitalocean.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/digitalocean.lst
+          ${{ env.CURL }} -o google_meet.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/google_meet.lst
+          ${{ env.CURL }} -o hetzner.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/hetzner.lst
+          ${{ env.CURL }} -o ovh.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/ovh.lst
+          ${{ env.CURL }} -o roblox.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/roblox.lst
+          ${{ env.CURL }} -o ru-services.txt https://github.com/hydraponique/roscomvpn-geosite/raw/refs/heads/master/data/category-ru
+          ${{ env.CURL }} -o custom-ip-list.txt https://github.com/vacuumbeef/custom-geoip/raw/refs/heads/main/custom-ip-list.txt
+
+      - name: Build geoip tool
+        working-directory: geoip
+        run: |
+          set -euo pipefail
+          go mod download
+          go build -o geoip
+
+      - name: Generate geoip artifacts
+        working-directory: geoip
+        run: |
+          set -euo pipefail
+          rm -rf output
+          ./geoip convert -c config.json
+          ls -l output/dat/*.dat
+
+      - name: main Prepare release directory and archives
+        if: github.ref_name == 'main'
+        run: |
+          set -euo pipefail
+          rm -rf release
+          mkdir -p release/text
+          cp geoip/output/dat/*.dat release/
+          cp -f geoip/output/text/*.txt release/text/
+          tar -czf /tmp/text.tar.gz     -C release text
+          test -s /tmp/text.tar.gz
+          sha256sum release/geoip.dat > release/geoip.dat.sha256
+
+      - name: main Publish GitHub Release
+        if: github.ref_name == 'main'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.DAILY_TAG }}
+          name: ${{ env.DAILY_TAG }}
+          prerelease: false
+          draft: false
+          files: |
+            release/*.dat
+            release/*.dat.sha256
+            release/text/*.txt

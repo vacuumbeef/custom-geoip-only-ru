@@ -1,0 +1,136 @@
+{
+  "input": [
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "ru-services",
+        "uri": "./ru-services.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./custom-ip-list.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./telegram.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./discord.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./meta.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./twitter.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./cloudflare.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./cloudfront.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./digitalocean.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./google_meet.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./hetzner.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./ovh.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "blocked",
+        "uri": "./roblox.txt"
+      }
+    },
+    {
+      "type": "private",
+      "action": "add"
+    },
+    {
+      "type": "text",
+      "action": "remove",
+      "args": {
+        "name": "private",
+        "ipOrCIDR": [
+          "0.0.0.0/8",
+          "::/128"
+        ]
+      }
+    }
+  ],
+  "output": [
+    {
+      "type": "v2rayGeoIPDat",
+      "action": "output",
+      "args": {
+        "outputName": "geoip.dat"
+      }
+    },
+    {
+      "type": "text",
+      "action": "output"
+    },
+  ]
+}
