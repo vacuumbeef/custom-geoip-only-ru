@@ -4,7 +4,7 @@
       "type": "text",
       "action": "add",
       "args": {
-        "name": "blocked",
+        "name": "custom-blocked",
         "uri": "./blocked.txt"
       }
     },
@@ -12,7 +12,7 @@
       "type": "text",
       "action": "add",
       "args": {
-        "name": "whitelist",
+        "name": "custom-whitelist",
         "uri": "./whitelist.txt"
       }
     },
