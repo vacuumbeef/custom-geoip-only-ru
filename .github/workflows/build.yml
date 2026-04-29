@@ -1,7 +1,7 @@
 name: Build geoip
 on:
   repository_dispatch:
-    types: [build_triggered]
+    types: [trigger-workflow]
   workflow_dispatch:
   schedule:
     - cron: '10 3 * * *'
