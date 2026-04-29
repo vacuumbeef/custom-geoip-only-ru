@@ -73,20 +73,17 @@ jobs:
       - name: Download inputs (IP lists + Geobases)
         working-directory: geoip
         run: |
+          git clone --depth 1 https://github.com/itdoginfo/allow-domains.git temp_repo
+          for f in temp_repo/Subnets/IPv4/*.lst; do
+          	cat $f | tee -a blocked.txt >/dev/null
+          	sed -i -e '$a\' blocked.txt
+          done
+          sort -u blocked.txt >/dev/null
+
+          rm -rf temp_repo
+
           set -euo pipefail
-          ${{ env.CURL }} -o telegram.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/telegram.lst
-          ${{ env.CURL }} -o discord.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/discord.lst
-          ${{ env.CURL }} -o meta.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/meta.lst
-          ${{ env.CURL }} -o twitter.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/twitter.lst
-          ${{ env.CURL }} -o cloudflare.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/cloudflare.lst
-          ${{ env.CURL }} -o cloudfront.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/cloudfront.lst
-          ${{ env.CURL }} -o digitalocean.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/digitalocean.lst
-          ${{ env.CURL }} -o google_meet.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/google_meet.lst
-          ${{ env.CURL }} -o hetzner.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/hetzner.lst
-          ${{ env.CURL }} -o ovh.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/ovh.lst
-          ${{ env.CURL }} -o roblox.txt https://raw.githubusercontent.com/vacuumbeef/allow-domains/refs/heads/main/Subnets/IPv4/roblox.lst
           ${{ env.CURL }} -o ru-services.txt https://github.com/hydraponique/roscomvpn-geosite/raw/refs/heads/master/data/category-ru
-          ${{ env.CURL }} -o custom-ip-list.txt https://github.com/vacuumbeef/custom-geoip/raw/refs/heads/main/custom-ip-list.txt
 
       - name: Build geoip tool
         working-directory: geoip

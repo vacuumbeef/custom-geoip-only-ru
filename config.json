@@ -4,8 +4,8 @@
       "type": "text",
       "action": "add",
       "args": {
-        "name": "ru-services",
-        "uri": "./ru-services.txt"
+        "name": "blocked",
+        "uri": "./blocked.txt"
       }
     },
     {
@@ -20,88 +20,8 @@
       "type": "text",
       "action": "add",
       "args": {
-        "name": "blocked",
-        "uri": "./telegram.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./discord.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./meta.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./twitter.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./cloudflare.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./cloudfront.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./digitalocean.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./google_meet.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./hetzner.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./ovh.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
-        "name": "blocked",
-        "uri": "./roblox.txt"
+        "name": "ru-services",
+        "uri": "./ru-services.txt"
       }
     },
     {
