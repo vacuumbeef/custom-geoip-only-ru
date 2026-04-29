@@ -83,7 +83,8 @@ jobs:
           rm -rf temp_repo
 
           set -euo pipefail
-          ${{ env.CURL }} -o ru-services.txt https://github.com/hydraponique/roscomvpn-geosite/raw/refs/heads/master/data/category-ru
+          ${{ env.CURL }} -o whitelist.txt https://github.com/hydraponique/roscomvpn-geoip/raw/refs/heads/master/release/text/whitelist.txt
+          
 
       - name: Build geoip tool
         working-directory: geoip

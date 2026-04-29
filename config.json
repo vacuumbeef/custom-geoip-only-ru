@@ -12,8 +12,8 @@
       "type": "text",
       "action": "add",
       "args": {
-        "name": "ru-services",
-        "uri": "./ru-services.txt"
+        "name": "whitelist",
+        "uri": "./whitelist.txt"
       }
     },
     {
