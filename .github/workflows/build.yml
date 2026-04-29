@@ -84,7 +84,7 @@ jobs:
 
           set -euo pipefail
           ${{ env.CURL }} -o whitelist.txt https://github.com/hydraponique/roscomvpn-geoip/raw/refs/heads/master/release/text/whitelist.txt
-          
+          ${{ env.CURL }} https://github.com/hydraponique/roscomvpn-geoip/raw/refs/heads/master/release/text/direct.txt >> whitelist.txt
 
       - name: Build geoip tool
         working-directory: geoip
