@@ -84,7 +84,6 @@ jobs:
 
           set -euo pipefail
           ${{ env.CURL }} -o ru-services.txt https://github.com/hydraponique/roscomvpn-geosite/raw/refs/heads/master/data/category-ru
-          ${{ env.CURL }} -o custom-ip-list.txt https://github.com/vacuumbeef/custom-geoip/raw/refs/heads/main/custom-ip-list.txt
 
       - name: Build geoip tool
         working-directory: geoip

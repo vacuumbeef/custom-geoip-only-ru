@@ -12,14 +12,6 @@
       "type": "text",
       "action": "add",
       "args": {
-        "name": "blocked",
-        "uri": "./custom-ip-list.txt"
-      }
-    },
-    {
-      "type": "text",
-      "action": "add",
-      "args": {
         "name": "ru-services",
         "uri": "./ru-services.txt"
       }
